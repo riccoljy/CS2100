@@ -36,7 +36,37 @@ char* intToString(int x) {
     return str;
 }
 
+int strLength(char* str) {
+    int i = 0;
+    while (str[i] != '\0') i++;
+    return i;
+}
+
 int isOdd(int x) {return x%2;}
+
+long power(int base, int pow) {
+    long result = base;
+    for (int i = 1; i < pow; i++) {result *= base;}
+    return result;
+}
+
+void flipBits(char *bits, int n) {
+    for (int i = 0; i < n; i++) {
+        bits[i] = bits[i] - '0' ? '0' : '1';
+    }
+}
+
+void flipNegativeBits(char *bits, int n) {
+    int reachedFirst1 = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        if (bits[i] == '0') continue;
+        else if (bits[i] == '1' && !reachedFirst1) {
+            reachedFirst1 = 1;
+            flipBits(bits, i);
+            return;
+        }
+    }
+}
 
 /**
  * @brief This function will convert the integer input that is represented in two's complement 
@@ -49,7 +79,7 @@ int isOdd(int x) {return x%2;}
  **/
 int twos_to_ones(int x)
 {
-    return x;
+    return x < 0 ? x - 1 : x;
 }
 
 /**
@@ -72,11 +102,13 @@ int twos_to_ones(int x)
  **/
 void binstr(int i, int n, char *s)
 {
+    int isNegative = i < 0;
     for (int j = n - 1; j >= 0; j--) {
         s[j] = !isOdd(i) || !i ? '0' : '1';
         i /= 2;
     }
     s[n] = '\0';
+    if (isNegative) flipNegativeBits(s, n);
 }
 
 /**
@@ -100,11 +132,13 @@ void binstr(int i, int n, char *s)
  **/
 int str2int(char *s, int n)
 {
-    int res = 0;
-    for (int i = 0; i < n; i++) {
-        res += s[i];
-        res *= 10;
+    int res = 0, largestBitValue = 1;
+    for (int i = n - 1; i > 0; i--) {
+        int index = (n - 1) - i;
+        if (s[i] == '1') res += largestBitValue;
+        largestBitValue *= 2;
     }
+    if (s[0] == '1') res -= largestBitValue - 1;
     return res;
 }
 
@@ -128,12 +162,12 @@ int validate_1s_complement(int x, int n)
 {
     int largestBitValue = 1, currTotal = 0, isNegative = (x < 0);
     if (isNegative) x -= 2*x;
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n - 1; i++) {
         currTotal += largestBitValue;
         largestBitValue *= 2;
         if (currTotal >= x) return 0;
     }
-    return isNegative ? -(currTotal - 1) : currTotal;
+    return isNegative ? -currTotal : currTotal;
 }
 
 /**
@@ -149,7 +183,7 @@ int validate_1s_complement(int x, int n)
  **/
 int check_carryout(char *carry_str)
 {
-    return *carry_str == '1';
+    return carry_str[0] - '0';
 }
 
 /**
@@ -173,7 +207,7 @@ int check_carryout(char *carry_str)
  **/
 int check_overflow(char *op1, char *op2, char *sum)
 {
-    return 1; //WIP
+    return (op1[0] == op2[0] && op1[0] != sum[0]);
 }
 
 /**
@@ -211,6 +245,13 @@ int check_overflow(char *op1, char *op2, char *sum)
  **/
 int perform_addition(int n, char *x, char *y, char *z, char *c)
 {
-    return 0; //WIP
+    c[n] = '0';
+    for (int i = n - 1; i >= 0; i--) {
+        int sum = x[i] + y[i] + c[i+1] - 3*'0';
+        c[i] = (sum > 1) ? '1' : '0';
+        z[i] = (sum == 2 || sum == 0) ? '0' : '1';
+    }
+    z[n] = '\0';
+    c[n+1] = '\0';
+    return 0;
 }
-
