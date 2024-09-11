@@ -45,6 +45,7 @@ int strLength(char* str) {
 int isOdd(int x) {return x%2;}
 
 long power(int base, int pow) {
+    if (pow == 0) return 1;
     long result = base;
     for (int i = 1; i < pow; i++) {result *= base;}
     return result;
