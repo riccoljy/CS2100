@@ -15,57 +15,11 @@ const char *student_tut_grp = "T07";
 #include <stdio.h>
 #include <stdlib.h>
 
-int lengthOfInt(int x) {
-    int length = 0, copy = x;
-    while (copy > 0) {
-        copy /= 10;
-        length++;
-    }
-    return length;
-}
-
-char* intToString(int x) {
-    int length = lengthOfInt(x);
-    char* str = (char *)malloc((length + 1) * sizeof(char));
-    for (int i = length - 1; i >= 0; i--) {
-        int remainder = x % 10;
-        x /= 10;
-        str[i] = remainder + '0';
-    }
-    str[length] = '\0';
-    return str;
-}
-
-int strLength(char* str) {
-    int i = 0;
-    while (str[i] != '\0') i++;
-    return i;
-}
-
 int isOdd(int x) {return x%2;}
-
-long power(int base, int pow) {
-    if (pow == 0) return 1;
-    long result = base;
-    for (int i = 1; i < pow; i++) {result *= base;}
-    return result;
-}
 
 void flipBits(char *bits, int n) {
     for (int i = 0; i < n; i++) {
         bits[i] = bits[i] - '0' ? '0' : '1';
-    }
-}
-
-void flipNegativeBits(char *bits, int n) {
-    int reachedFirst1 = 0;
-    for (int i = n - 1; i >= 0; i--) {
-        if (bits[i] == '0') continue;
-        else if (bits[i] == '1' && !reachedFirst1) {
-            reachedFirst1 = 1;
-            flipBits(bits, i);
-            return;
-        }
     }
 }
 
@@ -101,10 +55,11 @@ int twos_to_ones(int x)
  *       is 32 bits.
  *
  **/
-void binstr(int i, int n, char *s) //change to 1s complement pls
+void binstr(int i, int n, char *s)
 {
-    printf("i = %d\n", i);
+    // printf("i = %d\n", i);
     int isNegative = i < 0;
+    if (isNegative) i = ~i;
     for (int j = n - 1; j >= 0; j--) {
         s[j] = !isOdd(i) || !i ? '0' : '1';
         i /= 2;
@@ -134,14 +89,18 @@ void binstr(int i, int n, char *s) //change to 1s complement pls
  **/
 int str2int(char *s, int n) //change to 1s complement pls
 {
+    int isNegative = 0;
+    if (s[0] == '1') {
+        isNegative = 1;
+        flipBits(s, n);
+    }
     int res = 0, largestBitValue = 1;
-    for (int i = n - 1; i > 0; i--) {
+    for (int i = n - 1; i >= 0; i--) {
         int index = (n - 1) - i;
         if (s[i] == '1') res += largestBitValue;
         largestBitValue *= 2;
     }
-    if (s[0] == '1') res -= largestBitValue - 1;
-    return res;
+    return isNegative ? - res : res;
 }
 
 /**
