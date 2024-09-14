@@ -87,11 +87,10 @@ void binstr(int i, int n, char *s)
  *       exceeds 32, the function will return an undefined (arbitrary) value.
  *
  **/
-int str2int(char *s, int n) //change to 1s complement pls
+int str2int(char *s, int n)
 {
-    int isNegative = 0;
-    if (s[0] == '1') {
-        isNegative = 1;
+    int isNegative = (s[0] == '1');
+    if (isNegative) {
         flipBits(s, n);
     }
     int res = 0, largestBitValue = 1;
