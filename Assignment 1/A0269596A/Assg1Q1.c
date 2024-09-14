@@ -101,15 +101,16 @@ int twos_to_ones(int x)
  *       is 32 bits.
  *
  **/
-void binstr(int i, int n, char *s)
+void binstr(int i, int n, char *s) //change to 1s complement pls
 {
+    printf("i = %d\n", i);
     int isNegative = i < 0;
     for (int j = n - 1; j >= 0; j--) {
         s[j] = !isOdd(i) || !i ? '0' : '1';
         i /= 2;
     }
     s[n] = '\0';
-    if (isNegative) flipNegativeBits(s, n);
+    if (isNegative) flipBits(s, n);
 }
 
 /**
@@ -131,7 +132,7 @@ void binstr(int i, int n, char *s)
  *       exceeds 32, the function will return an undefined (arbitrary) value.
  *
  **/
-int str2int(char *s, int n)
+int str2int(char *s, int n) //change to 1s complement pls
 {
     int res = 0, largestBitValue = 1;
     for (int i = n - 1; i > 0; i--) {

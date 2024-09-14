@@ -76,7 +76,7 @@ long power(int base, int pow) {
 
 int hexToDecimal(char hex[], size_t size)
 {
-	printf("test %d", sizeof(hex)/sizeof(hex[0]));
+	printf("test %zu,\n size=%zu\n", sizeof(hex)/sizeof(hex[0]), size);
 	char *currentPtr = &(hex[size - 1]);
 	int result = 0, currentIndex = 0;
 	while (currentPtr != hex - 1) result += hexVal(*(currentPtr--)) * power(16, currentIndex++);
