@@ -1,25 +1,31 @@
 # arrayCount.asm
   .data 
-arrayA: .word 11, 0, 31, 22, 9, 17, 6, 8   # arrayA has 5 values
+arrayA: .word 0, 0, 0, 0, 0, 0, 0, 0   # arrayA has 8 dummy values
 count:  .word 0
 
   .text
-main:
+
+initVar:
     la $t0, arrayA #t0 = pointer
     addi $t1, $t0, 32 #t1 -> end
-    lw $t8, count #t8 = count
 
-    # code to setup the variable mapings
-    #add $zero, $zero, $zero  #dummy instructions, can be removed
-    #add $zero, $zero, $zero  #dummy instructions, can be removed
-    #add $zero, $zero, $zero  #dummy instructions, can be removed
+initArr:
+    beq $t0, $t1, main
+    li $v0, 5 #change syscall to read int
+    syscall
+    sw $v0, 0($t0)
+    addi $t0, $t0, 4
+    j initArr
 
+main:
+    la $t0, arrayA #t0 back to start of array
     # code for reading in the user value X
     li $v0, 5 #change syscall to read int
     syscall
     addi $t3, $v0, -1 #$t3 = mask (modulo)
 
     # code for counting multiples of X in arrayA
+    lw $t8, count #t8 = count
 loop:
     beq $t0, $t1, end
     lw $t2, 0($t0) #$t2 = *ptr
