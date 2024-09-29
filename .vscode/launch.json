@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "c:/Users/Ricco Lim/OneDrive - National University of Singapore/AY2425 S1/CS2100",
+      "program": "c:/Users/Ricco Lim/OneDrive - National University of Singapore/AY2425 S1/CS2100/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
